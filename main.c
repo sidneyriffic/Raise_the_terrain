@@ -103,7 +103,7 @@ int main(int ac, char *av[])
 		dprintf(2, "SDL init error: %s\n", SDL_GetError());
 		return (-1);
 	}
-	window = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED,
+	window = SDL_CreateWindow("Terrain", SDL_WINDOWPOS_UNDEFINED,
 				  SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
 				  SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (window == NULL)
