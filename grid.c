@@ -23,7 +23,7 @@ int init_grid(gridnode ***gridref, FILE *file,
 	char *buffer, *tok;
 	unsigned int xalloc = 1, yalloc = 1, x = 0, y = 0;
 	size_t n = 0;
-	gridnode **grid = NULL;
+	gridnode **grid = NULL, *catch;
 
 	while (getline(&buffer, &n, file) != -1)
 	{
@@ -31,16 +31,24 @@ int init_grid(gridnode ***gridref, FILE *file,
 		{
 			yalloc *= 2;
 			grid = realloc(grid, sizeof(gridnode *) * yalloc);
+			if (grid == NULL)
+				return (-1);
+			*gridref = grid;
 		}
 		tok = strtok(buffer, " ");
 		grid[y] = malloc(sizeof(gridnode));
+		if (grid[y] == NULL)
+			return (-1);
 		grid[y][0].end = 1;
 		while (tok != NULL && *tok != '\n')
 		{
 			if (xalloc < x + 2)
 			{
 				xalloc *= 2;
-				grid[y] = realloc(grid[y], sizeof(gridnode) * xalloc);
+				catch = realloc(grid[y], sizeof(gridnode) * xalloc);
+				if (catch == NULL)
+					return (-1);
+				grid[y] = catch;
 			}
 			grid[y][x].end = 0;
 			grid[y][x].basez = atoi(tok);

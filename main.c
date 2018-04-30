@@ -76,6 +76,26 @@ int drawloop(SDL_Renderer *renderer, gridnode **grid,
 }
 
 /**
+ * freegrid - frees grid
+ *
+ * @grid: grid to free
+ *
+ * Return: void
+ */
+void freegrid(gridnode **grid)
+{
+	int ct = 0;
+
+	if (grid != NULL)
+		if (*grid != NULL)
+		{
+			while (grid[ct] != NULL)
+				free(grid[ct++]);
+			free(grid);
+		}
+}
+
+/**
  * main - draw a heightmap grid and modify display of it with UI
  *
  * @ac: number of arguments
@@ -126,7 +146,9 @@ int main(int ac, char *av[])
 		return (-1);
 	}
 	ret = init_grid(&grid, file, &gwidth, &gheight);
-	drawloop(renderer, grid, gwidth, gheight);
+	if (ret != -1)
+		drawloop(renderer, grid, gwidth, gheight);
+	freegrid(grid);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
