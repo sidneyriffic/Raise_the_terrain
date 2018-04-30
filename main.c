@@ -25,10 +25,9 @@ int drawloop(SDL_Renderer *renderer, gridnode **grid,
 	int quit, scale, scalemax, draw = 1;
 	double rotate = M_PI / -4, incline = 3 * M_PI / -8;
 
-	scale = SCREEN_HEIGHT / gheight / 1.5;
-	scalemax = SCREEN_WIDTH / gwidth / 1.5;
-	if (scale > scalemax)
-		scalemax = scale;
+	scale = gheight < gwidth ? gheight : gwidth;
+	scalemax = SCREEN_HEIGHT > SCREEN_WIDTH ? SCREEN_HEIGHT / 1.5 : SCREEN_WIDTH / 1.5;
+	scalemax = scalemax / scale;
 	scale = scalemax;
 	quit = 0;
 	while (!quit)
@@ -87,7 +86,6 @@ int drawloop(SDL_Renderer *renderer, gridnode **grid,
 int main(int ac, char *av[])
 {
 	SDL_Window *window = NULL;
-	SDL_Surface *surface = NULL;
 	SDL_Renderer *renderer = NULL;
 	int ret = 0;
 	unsigned int gwidth = 0, gheight;
@@ -116,20 +114,20 @@ int main(int ac, char *av[])
 	if (renderer == NULL)
 	{
 		dprintf(2, "Renderer creation error: %s", SDL_GetError());
+		SDL_DestroyWindow(window);
 		return (-1);
 	}
 	file = fopen(av[1], "r");
 	if (file == NULL)
 	{
 		dprintf(2, "Failed to open grid file %s.\n", av[1]);
+		SDL_DestroyWindow(window);
+		SDL_DestroyRenderer(renderer);
 		return (-1);
 	}
-	SDL_UpdateWindowSurface(window);
-	surface = SDL_GetWindowSurface(window);
 	ret = init_grid(&grid, file, &gwidth, &gheight);
 	drawloop(renderer, grid, gwidth, gheight);
 	SDL_DestroyRenderer(renderer);
-	SDL_FreeSurface(surface);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 	return (ret);
