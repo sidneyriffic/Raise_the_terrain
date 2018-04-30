@@ -1,4 +1,4 @@
-Terrain generator  
+#Terrain generator  
 
 Compile using *gcc -lm -lSDL2 -o terrain*  
 Requires SDL2 library  
