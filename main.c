@@ -46,8 +46,9 @@ int drawloop(SDL_Renderer *renderer, gridnode **grid,
 		}
 		while (SDL_PollEvent(&event) != 0)
 		{
-			if (event.type == SDL_KEYDOWN &&
-			    event.key.keysym.sym == SDLK_ESCAPE)
+			if (event.type == SDL_QUIT ||
+			    (event.type == SDL_KEYDOWN &&
+			     event.key.keysym.sym == SDLK_ESCAPE))
 				quit = 1;
 			if (event.type == SDL_KEYDOWN &&
 			    event.key.keysym.sym == SDLK_LEFT)
